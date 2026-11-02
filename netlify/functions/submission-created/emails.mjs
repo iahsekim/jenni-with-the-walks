@@ -3,11 +3,11 @@
 // and web-safe font fallbacks. Colors match the site: tomato, lime, ink, peach.
 
 const C = {
-  tomato: '#EF3E28',
-  lime: '#F5D980',
-  ink: '#251B17',
-  peach: '#FBEBC2',
-  paper: '#FFF7E8',
+  tomato: '#E8412C',
+  lime: '#FFF8F4',
+  ink: '#1A1412',
+  peach: '#FFDCD6',
+  paper: '#FFF8F4',
   muted: '#6A5550',
   white: '#FFFFFF',
 };
@@ -66,7 +66,7 @@ function button(href, text, bg = C.lime, fg = C.ink) {
 }
 
 const row = (k, v) =>
-  `<tr><td style="padding:8px 0;border-bottom:2px dotted #E8D7B5;font-family:${MONO};font-size:12px;font-weight:700;color:${C.muted};text-transform:uppercase;letter-spacing:1px;width:90px;vertical-align:top;">${esc(k)}</td><td style="padding:8px 0 8px 10px;border-bottom:2px dotted #E8D7B5;font-family:${BODY};font-size:16px;color:${C.ink};">${v}</td></tr>`;
+  `<tr><td style="padding:8px 0;border-bottom:2px dotted #E5CBC4;font-family:${MONO};font-size:12px;font-weight:700;color:${C.muted};text-transform:uppercase;letter-spacing:1px;width:90px;vertical-align:top;">${esc(k)}</td><td style="padding:8px 0 8px 10px;border-bottom:2px dotted #E5CBC4;font-family:${BODY};font-size:16px;color:${C.ink};">${v}</td></tr>`;
 
 const quote = (msg) =>
   msg
