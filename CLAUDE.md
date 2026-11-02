@@ -5,7 +5,7 @@ Static one-page site for Jenni's Germantown (Nashville) dog walking business. No
 ## Editing rules
 - All markup, CSS, and JS live in `public/index.html`. Photos live in `public/assets/` (JPEG, max ~1000px on the long side).
 - Design system (tokens in the `:root` block at the top of the CSS):
-  - Tomato `#E8412C` = brand surfaces (hero, footer, accents). Lime `#C8F24A` = tap targets only. Ink `#1A1412` = outlines and structure. Peach tint `#FFDCD6` = section backgrounds.
+  - Tomato red `#EF3E28` = brand surfaces (hero, footer, accents). Butter yellow `#F5D980` = tap targets and highlights. Espresso `#251B17` = text, outlines, structure. Warm cream `#FFF7E8` = page background. Soft butter `#FBEBC2` = alternate section backgrounds.
   - Fonts: Bagel Fat One (display), Bricolage Grotesque (body), Space Mono (labels, prices).
   - Thick 3px ink borders and hard offset shadows; no gradients.
 - Must stay mobile-first: check at 390px wide, no horizontal scroll, the sticky "Book a free meet and greet" bar stays at the bottom on phones.
