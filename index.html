@@ -677,13 +677,13 @@ const MEET_ENDPOINT = "netlify";
     const times=[1,2,3].map(n=>nice($('d'+n).value)+' at '+$('t'+n).value);
     const data={ name:$('mName').value.trim(), phone:$('mPhone').value.trim(), email:$('mEmail').value.trim(), option_1:times[0], option_2:times[1], option_3:times[2], message:$('mMsg').value.trim(), interest:$('interest').value };
     const btn=form.querySelector('.m-send'); btn.setAttribute('aria-busy','true'); btn.textContent='Sending…';
-    let ok=true, preview=!MEET_ENDPOINT;
+    let ok=true, preview=!MEET_ENDPOINT, code='';
     try{
-      if(MEET_ENDPOINT==='netlify'){ const body=new URLSearchParams({'form-name':'meet-greet',...data}); const r=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body}); ok=r.ok; }
-      else if(MEET_ENDPOINT){ const r=await fetch(MEET_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(data)}); ok=r.ok; }
-    }catch(err){ ok=false; }
+      if(MEET_ENDPOINT==='netlify'){ const body=new URLSearchParams({'form-name':'meet-greet',...data}); const r=await fetch('/',{method:'POST',headers:{'Content-Type':'application/x-www-form-urlencoded'},body:body.toString()}); ok=r.ok; code=String(r.status); }
+      else if(MEET_ENDPOINT){ const r=await fetch(MEET_ENDPOINT,{method:'POST',headers:{'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify(data)}); ok=r.ok; code=String(r.status); }
+    }catch(err){ ok=false; code='network'; console.error('Meet and greet submit failed',err); }
     btn.removeAttribute('aria-busy'); btn.textContent='Send request';
-    if(!ok) return fail('That didn\'t go through. Try again, or text Jenni.');
+    if(!ok){ console.error('Meet and greet submit failed, status',code); return fail('That didn\'t go through ('+code+'). Try again, or email jenniwiththewalks@gmail.com.'); }
     $('doneTimes').innerHTML=''; times.forEach(x=>{ const li=document.createElement('li'); li.textContent=x; $('doneTimes').appendChild(li); });
     $('mPreview').hidden=!preview; $('meetBody').hidden=true; $('meetDone').hidden=false; form.reset(); [1,2,3].forEach(n=>{ $('d'+n).value=''; const b=$('d'+n+'b'); b.querySelector('span').textContent='Pick a date'; b.classList.remove('set'); }); $('meetDoneBtn').focus();
   });
