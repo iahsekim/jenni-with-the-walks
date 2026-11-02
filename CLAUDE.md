@@ -1,9 +1,9 @@
 # Jenni with the Walks
 
-Static one-page site for Jenni's Germantown (Nashville) dog walking business. No build step: `index.html` + `assets/`. Netlify deploys automatically on every push to `main`.
+Static one-page site for Jenni's Germantown (Nashville) dog walking business. No build step. The site is `public/index.html` + `public/assets/`; `netlify/functions/` holds the email function. Netlify deploys automatically on every push to `main`.
 
 ## Editing rules
-- All markup, CSS, and JS live in `index.html`. Photos live in `assets/` (JPEG, max ~1000px on the long side).
+- All markup, CSS, and JS live in `public/index.html`. Photos live in `public/assets/` (JPEG, max ~1000px on the long side).
 - Design system (tokens in the `:root` block at the top of the CSS):
   - Tomato `#E8412C` = brand surfaces (hero, footer, accents). Lime `#C8F24A` = tap targets only. Ink `#1A1412` = outlines and structure. Peach tint `#FFDCD6` = section backgrounds.
   - Fonts: Bagel Fat One (display), Bricolage Grotesque (body), Space Mono (labels, prices).
@@ -19,5 +19,6 @@ Static one-page site for Jenni's Germantown (Nashville) dog walking business. No
 
 ## Meet and greet form
 - Netlify Form named `meet-greet` (fields: name, phone, email, option_1..3, message, interest). Submitted by JS when `MEET_ENDPOINT = "netlify"`.
-- Email notifications to jenniwiththewalks@gmail.com are configured in Netlify: Site configuration → Notifications → Form submission notifications.
+- Emails are sent by `netlify/functions/submission-created/` (runs on every non-spam submission): a branded email to jenniwiththewalks@gmail.com plus a confirmation copy to the submitter. Templates are in `emails.mjs` (table-based, inline styles). Sends via Gmail SMTP using Netlify env vars `GMAIL_USER` and `GMAIL_APP_PASSWORD`.
+- Netlify's built-in form email notification should stay off, or Jenni gets duplicates.
 - Any new field must also exist as an input in the static HTML form or Netlify drops it.
