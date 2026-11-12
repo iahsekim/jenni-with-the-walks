@@ -33,12 +33,9 @@ async function stats(days) {
   const end = new Date();
   const start = new Date(end.getTime() - days * 864e5);
   const query = `query($a:String!,$f:AccountRumPageloadEventsAdaptiveGroupsFilter_InputObject){viewer{accounts(filter:{accountTag:$a}){
-    total:rumPageloadEventsAdaptiveGroups(filter:$f,limit:1){count sum{visits}}
-    series:rumPageloadEventsAdaptiveGroups(filter:$f,limit:1000,orderBy:[date_ASC]){count sum{visits} dimensions{date}}
+    total:rumPageloadEventsAdaptiveGroups(filter:$f,limit:1){sum{visits}}
+    series:rumPageloadEventsAdaptiveGroups(filter:$f,limit:1000,orderBy:[date_ASC]){sum{visits} dimensions{date}}
     sources:rumPageloadEventsAdaptiveGroups(filter:$f,limit:8,orderBy:[sum_visits_DESC]){sum{visits} dimensions{refererHost}}
-    pages:rumPageloadEventsAdaptiveGroups(filter:$f,limit:8,orderBy:[count_DESC]){count dimensions{requestPath}}
-    devices:rumPageloadEventsAdaptiveGroups(filter:$f,limit:5,orderBy:[sum_visits_DESC]){sum{visits} dimensions{deviceType}}
-    countries:rumPageloadEventsAdaptiveGroups(filter:$f,limit:5,orderBy:[sum_visits_DESC]){sum{visits} dimensions{countryName}}
   }}}`;
   const filter = { AND: [{ datetime_geq: start.toISOString(), datetime_leq: end.toISOString() }, { siteTag: CF_SITE_TAG }] };
   const r = await fetch('https://api.cloudflare.com/client/v4/graphql', {
@@ -59,17 +56,13 @@ async function stats(days) {
   const series = [];
   for (let i = days - 1; i >= 0; i--) {
     const d = new Date(end.getTime() - i * 864e5).toISOString().slice(0, 10);
-    series.push({ date: d, visits: byDay[d]?.sum?.visits || 0, pageviews: byDay[d]?.count || 0 });
+    series.push({ date: d, visits: byDay[d]?.sum?.visits || 0 });
   }
   return {
     days,
     visits: t?.sum?.visits || 0,
-    pageviews: t?.count || 0,
     series,
     sources: (acc.sources || []).map((s) => ({ name: s.dimensions.refererHost || 'Direct or app', value: s.sum.visits })),
-    pages: (acc.pages || []).map((s) => ({ name: s.dimensions.requestPath || '/', value: s.count })),
-    devices: (acc.devices || []).map((s) => ({ name: s.dimensions.deviceType || 'Unknown', value: s.sum.visits })),
-    countries: (acc.countries || []).map((s) => ({ name: s.dimensions.countryName || 'Unknown', value: s.sum.visits })),
   };
 }
 
