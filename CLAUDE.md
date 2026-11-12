@@ -22,3 +22,7 @@ Static one-page site for Jenni's Germantown (Nashville) dog walking business. No
 - Emails are sent by `netlify/functions/submission-created/` (runs on every non-spam submission): a branded email to jenniwiththewalks@gmail.com plus a confirmation copy to the submitter. Templates are in `emails.mjs` (table-based, inline styles). Sends via Gmail SMTP using Netlify env vars `GMAIL_USER` and `GMAIL_APP_PASSWORD`.
 - Netlify's built-in form email notification should stay off, or Jenni gets duplicates.
 - Any new field must also exist as an input in the static HTML form or Netlify drops it.
+
+## Analytics
+- Cloudflare Web Analytics (free, cookie-free) via the beacon script at the bottom of `public/index.html`. Dashboard: Cloudflare account → Analytics → Web analytics → jenniwiththewalks.com.
+- Instagram bio link should be `jenniwiththewalks.com/?ref=instagram` so that traffic is identifiable.
