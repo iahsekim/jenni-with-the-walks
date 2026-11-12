@@ -26,3 +26,8 @@ Static one-page site for Jenni's Germantown (Nashville) dog walking business. No
 ## Analytics
 - Cloudflare Web Analytics (free, cookie-free) via the beacon script at the bottom of `public/index.html`. Dashboard: Cloudflare account → Analytics → Web analytics → jenniwiththewalks.com.
 - Instagram bio link should be `jenniwiththewalks.com/?ref=instagram` so that traffic is identifiable.
+
+## Dashboard (/admin)
+- `public/admin/index.html` is a private, password-gated dashboard (noindex): meet and greet requests with status (new, contacted, scheduled, client, closed), meeting time, internal notes, manual "Add lead", plus website stats. `/admin/?demo` shows it with fake data, no backend.
+- API: `netlify/functions/admin.mjs` at `/api/admin`, auth via `x-admin-key` header = env `ADMIN_PASSWORD`. Stats come from Cloudflare's GraphQL API (env `CF_API_TOKEN`, permission Account Analytics: Read).
+- Leads live in Netlify Blobs store `leads` (`netlify/lib/leads.mjs`). `submission-created` saves each form submission there before sending the emails.

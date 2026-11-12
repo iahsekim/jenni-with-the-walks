@@ -1,8 +1,11 @@
 // Runs automatically after every verified (non-spam) Netlify Forms submission.
-// Sends a branded email to Jenni and a confirmation copy to the person who submitted.
-// Needs two environment variables in Netlify: GMAIL_USER and GMAIL_APP_PASSWORD.
+// 1. Saves the request as a lead for the /admin dashboard (Netlify Blobs).
+// 2. Sends a branded email to Jenni and a confirmation copy to the person who submitted.
+// Email needs the env var GMAIL_APP_PASSWORD (GMAIL_USER defaults to Jenni's address).
 import nodemailer from 'nodemailer';
+import { connectLambda } from '@netlify/blobs';
 import { ownerEmail, submitterEmail } from './emails.mjs';
+import { leadFromForm, saveLead } from '../../lib/leads.mjs';
 
 const TO = 'jenniwiththewalks@gmail.com';
 
@@ -16,6 +19,14 @@ export const handler = async (event) => {
   if (payload.form_name !== 'meet-greet') return { statusCode: 200, body: 'Ignored' };
 
   const d = payload.data || {};
+
+  try {
+    connectLambda(event);
+    await saveLead(leadFromForm(d, { id: payload.id, createdAt: payload.created_at }));
+  } catch (err) {
+    console.error('Could not save lead to dashboard storage:', err);
+  }
+
   const user = process.env.GMAIL_USER || TO;
   const pass = process.env.GMAIL_APP_PASSWORD;
   if (!pass) {
